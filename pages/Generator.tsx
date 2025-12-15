@@ -608,8 +608,40 @@ export const Generator: React.FC = () => {
             )}
           </div>
 
-          {/* Download Section */}
-          {spriteResult && (
+          {/* Download Section - 3D Model */}
+          {currentResult && selectedMode === '3D' && !isGenerating && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
+                <Download size={16} />
+                Downloads
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleDownload(
+                    currentResult.fileUrl,
+                    `model_${currentResult.id}.glb`
+                  )}
+                  className="px-4 py-2 bg-pastel-pink border-2 border-black rounded-lg text-sm font-bold hover:bg-pink-300 flex items-center gap-2 transition-all"
+                >
+                  <Download size={14} /> Download GLB Model
+                </button>
+                {currentResult.thumbnailUrl && (
+                  <button
+                    onClick={() => handleDownload(
+                      currentResult.thumbnailUrl,
+                      `reference_${currentResult.id}.png`
+                    )}
+                    className="px-3 py-2 bg-white border border-gray-300 rounded-lg text-xs font-medium hover:bg-gray-50 flex items-center gap-1"
+                  >
+                    <Download size={12} /> Reference Image
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Download Section - Sprites */}
+          {spriteResult && selectedMode === 'SPRITE' && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
                 <Download size={16} />

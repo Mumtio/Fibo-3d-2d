@@ -1,0 +1,59 @@
+{
+  "job_id": "b0566709-7d61-46eb-88fb-c11a4467564d",
+  "prompt": "bird",
+  "preset": "anime_action",
+  "style": "anime",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "attack": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack_sheet.png",
+      "gif": "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack.gif",
+      "frames": [
+        "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack/frame_00.png",
+        "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack/frame_01.png",
+        "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack/frame_02.png",
+        "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack/frame_03.png",
+        "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack/frame_04.png",
+        "outputs/b0566709-7d61-46eb-88fb-c11a4467564d/attack/frame_05.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "attack",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "attack",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}

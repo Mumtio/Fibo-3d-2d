@@ -1,0 +1,204 @@
+{
+  "job_id": "fb99dd4a-9b14-41cb-9093-0e8f6c738fcf",
+  "prompt": "ninja",
+  "preset": "anime_action",
+  "style": "anime",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "idle": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle_sheet.png",
+      "gif": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle.gif",
+      "frames": [
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle/frame_00.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle/frame_01.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle/frame_02.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle/frame_03.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle/frame_04.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/idle/frame_05.png"
+      ],
+      "loop": true
+    },
+    "run": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run_sheet.png",
+      "gif": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run.gif",
+      "frames": [
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run/frame_00.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run/frame_01.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run/frame_02.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run/frame_03.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run/frame_04.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/run/frame_05.png"
+      ],
+      "loop": true
+    },
+    "attack": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack_sheet.png",
+      "gif": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack.gif",
+      "frames": [
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack/frame_00.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack/frame_01.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack/frame_02.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack/frame_03.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack/frame_04.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/attack/frame_05.png"
+      ],
+      "loop": true
+    },
+    "jump": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump_sheet.png",
+      "gif": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump.gif",
+      "frames": [
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump/frame_00.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump/frame_01.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump/frame_02.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump/frame_03.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump/frame_04.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/jump/frame_05.png"
+      ],
+      "loop": true
+    },
+    "hurt": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt_sheet.png",
+      "gif": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt.gif",
+      "frames": [
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt/frame_00.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt/frame_01.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt/frame_02.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt/frame_03.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt/frame_04.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/hurt/frame_05.png"
+      ],
+      "loop": false
+    },
+    "death": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death_sheet.png",
+      "gif": "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death.gif",
+      "frames": [
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death/frame_00.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death/frame_01.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death/frame_02.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death/frame_03.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death/frame_04.png",
+        "outputs/fb99dd4a-9b14-41cb-9093-0e8f6c738fcf/death/frame_05.png"
+      ],
+      "loop": false
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "idle",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "run",
+        "frames": {
+          "start": 6,
+          "end": 11
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "attack",
+        "frames": {
+          "start": 12,
+          "end": 17
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "jump",
+        "frames": {
+          "start": 18,
+          "end": 23
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "hurt",
+        "frames": {
+          "start": 24,
+          "end": 29
+        },
+        "frameRate": 12,
+        "repeat": 0
+      },
+      {
+        "key": "death",
+        "frames": {
+          "start": 30,
+          "end": 35
+        },
+        "frameRate": 12,
+        "repeat": 0
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "idle",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "run",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "attack",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "jump",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "hurt",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": false
+      },
+      {
+        "name": "death",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": false
+      }
+    ]
+  }
+}
