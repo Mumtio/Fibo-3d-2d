@@ -229,8 +229,8 @@ export const Generator: React.FC = () => {
                  spriteBackendStatus === 'offline' ? <AlertCircle size={14} /> :
                  <RefreshCw size={14} className="animate-spin" />}
                 <span>
-                  {spriteBackendStatus === 'online' ? '2D Backend Connected (localhost:5000)' :
-                   spriteBackendStatus === 'offline' ? '2D Backend Offline - Run: python app.py in backend 2d sprite folder' :
+                  {spriteBackendStatus === 'online' ? '2D Backend Connected' :
+                   spriteBackendStatus === 'offline' ? '2D Backend Offline' :
                    'Checking 2D backend...'}
                 </span>
               </div>
@@ -245,8 +245,8 @@ export const Generator: React.FC = () => {
                  backend3DStatus === 'offline' ? <AlertCircle size={14} /> :
                  <RefreshCw size={14} className="animate-spin" />}
                 <span>
-                  {backend3DStatus === 'online' ? '3D Backend Connected (localhost:8000)' :
-                   backend3DStatus === 'offline' ? '3D Backend Offline - Run: uvicorn app.main:app in 3d backend folder' :
+                  {backend3DStatus === 'online' ? '3D Backend Connected' :
+                   backend3DStatus === 'offline' ? '3D Backend Offline' :
                    'Checking 3D backend...'}
                 </span>
               </div>
