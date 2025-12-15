@@ -1,0 +1,23 @@
+{
+  "name": "anime_action",
+  "display_name": "Anime Action Style",
+  "description": "Dynamic anime-style characters with bold outlines and vibrant colors",
+  "style": "anime",
+  "medium": "digital illustration",
+  "canvas": [512, 512],
+  "color_scheme": "Vibrant anime colors with bold outlines",
+  "frame_rate": 12,
+  "frame_duration": 83,
+  "animations": {
+    "idle": 6,
+    "run": 6,
+    "attack": 6,
+    "jump": 6,
+    "hurt": 6,
+    "death": 6
+  },
+  "prompt_augmentation": {
+    "prefix": "anime style, dynamic pose, bold outlines",
+    "suffix": "vibrant colors, clean lineart, game sprite"
+  }
+}

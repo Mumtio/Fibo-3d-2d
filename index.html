@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GenForge | 3D & 2D Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=VT323&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+              retro: ['"VT323"', 'monospace'],
+            },
+            colors: {
+              cream: '#FFF8E7',
+              retro: {
+                light: '#FFFFFF',
+                base: '#E0E0E0',
+                dark: '#808080',
+                border: '#404040',
+              },
+              pastel: {
+                pink: '#FF90E8',
+                mint: '#90FFB5',
+                yellow: '#FFC900',
+                purple: '#D4C5F5',
+              }
+            },
+            boxShadow: {
+              'retro': '2px 2px 0px 0px #404040',
+              'retro-pressed': 'inset 2px 2px 0px 0px #404040',
+              'float': '8px 8px 0px 0px rgba(0,0,0,0.1)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #FFF8E7;
+        overflow-x: hidden;
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #E0E0E0; 
+        border-left: 1px solid #404040;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #FF90E8; 
+        border: 2px solid #404040;
+        border-radius: 6px;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.559.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "react": "https://esm.sh/react@^19.2.1",
+    "zustand": "https://esm.sh/zustand@^5.0.9",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+    "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
+    "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.4.2",
+    "three": "https://esm.sh/three@^0.182.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

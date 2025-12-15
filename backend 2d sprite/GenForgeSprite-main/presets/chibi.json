@@ -1,0 +1,22 @@
+{
+  "name": "chibi",
+  "display_name": "Chibi Style",
+  "description": "Cute chibi-style characters with big heads and small bodies",
+  "style": "chibi",
+  "medium": "digital illustration",
+  "canvas": [256, 256],
+  "color_scheme": "Soft, pastel colors with cute aesthetics",
+  "frame_rate": 10,
+  "frame_duration": 100,
+  "animations": {
+    "idle": 4,
+    "run": 6,
+    "jump": 3,
+    "attack": 4,
+    "happy": 4
+  },
+  "prompt_augmentation": {
+    "prefix": "chibi style, big head, small body, cute",
+    "suffix": "soft pastel colors, adorable, kawaii game sprite"
+  }
+}

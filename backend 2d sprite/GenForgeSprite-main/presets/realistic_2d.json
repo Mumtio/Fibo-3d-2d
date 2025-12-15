@@ -1,0 +1,23 @@
+{
+  "name": "realistic_2d",
+  "display_name": "High-res Realistic 2D",
+  "description": "Detailed realistic character art for high-fidelity games",
+  "style": "realistic",
+  "medium": "digital painting",
+  "canvas": [512, 512],
+  "color_scheme": "Natural, realistic colors with detailed shading",
+  "frame_rate": 24,
+  "frame_duration": 42,
+  "animations": {
+    "idle": 8,
+    "walk": 12,
+    "run": 8,
+    "attack": 6,
+    "hurt": 3,
+    "death": 6
+  },
+  "prompt_augmentation": {
+    "prefix": "realistic digital painting, detailed, high quality",
+    "suffix": "natural lighting, detailed shading, game character"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "job_id": "b60a6139-2173-4df9-b1a3-caeee3e7421c",
+  "prompt": " man ",
+  "preset": "cartoon_platformer",
+  "style": "cartoon",
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "jump": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/b60a6139-2173-4df9-b1a3-caeee3e7421c/jump_sheet.png",
+      "gif": "outputs/b60a6139-2173-4df9-b1a3-caeee3e7421c/jump.gif",
+      "frames": [
+        "outputs/b60a6139-2173-4df9-b1a3-caeee3e7421c/jump/frame_00.png",
+        "outputs/b60a6139-2173-4df9-b1a3-caeee3e7421c/jump/frame_01.png",
+        "outputs/b60a6139-2173-4df9-b1a3-caeee3e7421c/jump/frame_02.png",
+        "outputs/b60a6139-2173-4df9-b1a3-caeee3e7421c/jump/frame_03.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "animations": [
+      {
+        "key": "jump",
+        "frames": {
+          "start": 0,
+          "end": 3
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 256,
+      "y": 256
+    },
+    "clips": [
+      {
+        "name": "jump",
+        "frameCount": 4,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "job_id": "a66273b1-1fe4-48fd-b9d9-e536e9a3a323",
+  "prompt": "cute",
+  "preset": "pixel_art_rpg",
+  "style": "pixel art",
+  "frame_size": [
+    64,
+    64
+  ],
+  "frame_rate": 8,
+  "frame_duration_ms": 125,
+  "animations": {
+    "walk_up": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/a66273b1-1fe4-48fd-b9d9-e536e9a3a323/walk_up_sheet.png",
+      "gif": "outputs/a66273b1-1fe4-48fd-b9d9-e536e9a3a323/walk_up.gif",
+      "frames": [
+        "outputs/a66273b1-1fe4-48fd-b9d9-e536e9a3a323/walk_up/frame_00.png",
+        "outputs/a66273b1-1fe4-48fd-b9d9-e536e9a3a323/walk_up/frame_01.png",
+        "outputs/a66273b1-1fe4-48fd-b9d9-e536e9a3a323/walk_up/frame_02.png",
+        "outputs/a66273b1-1fe4-48fd-b9d9-e536e9a3a323/walk_up/frame_03.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "animations": [
+      {
+        "key": "walk_up",
+        "frames": {
+          "start": 0,
+          "end": 3
+        },
+        "frameRate": 8,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 64,
+      "y": 64
+    },
+    "clips": [
+      {
+        "name": "walk_up",
+        "frameCount": 4,
+        "sampleRate": 8,
+        "loopTime": true
+      }
+    ]
+  }
+}

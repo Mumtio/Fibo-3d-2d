@@ -1,0 +1,22 @@
+{
+  "name": "cartoon_platformer",
+  "display_name": "Cartoon Platformer",
+  "description": "Colorful cartoon style for family-friendly platformers",
+  "style": "cartoon",
+  "medium": "digital illustration",
+  "canvas": [256, 256],
+  "color_scheme": "Bright, saturated cartoon colors",
+  "frame_rate": 12,
+  "frame_duration": 83,
+  "animations": {
+    "idle": 4,
+    "run": 8,
+    "jump": 4,
+    "attack": 4,
+    "hurt": 2
+  },
+  "prompt_augmentation": {
+    "prefix": "cartoon style, bold outlines, expressive",
+    "suffix": "bright saturated colors, family-friendly, game sprite"
+  }
+}

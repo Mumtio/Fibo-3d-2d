@@ -1,0 +1,88 @@
+{
+  "job_id": "91906cd5-02d2-4ae9-bc2f-7041fe0753d6",
+  "prompt": "cute",
+  "preset": "cartoon_platformer",
+  "style": "cartoon",
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "idle": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/idle_sheet.png",
+      "gif": "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/idle.gif",
+      "frames": [
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/idle/frame_00.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/idle/frame_01.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/idle/frame_02.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/idle/frame_03.png"
+      ],
+      "loop": true
+    },
+    "run": {
+      "frame_count": 8,
+      "sprite_sheet": "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run_sheet.png",
+      "gif": "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run.gif",
+      "frames": [
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_00.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_01.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_02.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_03.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_04.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_05.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_06.png",
+        "outputs/91906cd5-02d2-4ae9-bc2f-7041fe0753d6/run/frame_07.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "animations": [
+      {
+        "key": "idle",
+        "frames": {
+          "start": 0,
+          "end": 3
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "run",
+        "frames": {
+          "start": 4,
+          "end": 11
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 256,
+      "y": 256
+    },
+    "clips": [
+      {
+        "name": "idle",
+        "frameCount": 4,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "run",
+        "frameCount": 8,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}

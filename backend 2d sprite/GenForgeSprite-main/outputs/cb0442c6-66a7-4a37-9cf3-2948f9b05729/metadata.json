@@ -1,0 +1,82 @@
+{
+  "job_id": "cb0442c6-66a7-4a37-9cf3-2948f9b05729",
+  "prompt": "cute",
+  "preset": "pixel_art_rpg",
+  "style": "pixel art",
+  "frame_size": [
+    64,
+    64
+  ],
+  "frame_rate": 8,
+  "frame_duration_ms": 125,
+  "animations": {
+    "idle": {
+      "frame_count": 2,
+      "sprite_sheet": "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/idle_sheet.png",
+      "gif": "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/idle.gif",
+      "frames": [
+        "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/idle/frame_00.png",
+        "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/idle/frame_01.png"
+      ],
+      "loop": true
+    },
+    "walk_up": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/walk_up_sheet.png",
+      "gif": "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/walk_up.gif",
+      "frames": [
+        "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/walk_up/frame_00.png",
+        "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/walk_up/frame_01.png",
+        "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/walk_up/frame_02.png",
+        "outputs/cb0442c6-66a7-4a37-9cf3-2948f9b05729/walk_up/frame_03.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "animations": [
+      {
+        "key": "idle",
+        "frames": {
+          "start": 0,
+          "end": 1
+        },
+        "frameRate": 8,
+        "repeat": -1
+      },
+      {
+        "key": "walk_up",
+        "frames": {
+          "start": 2,
+          "end": 5
+        },
+        "frameRate": 8,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 64,
+      "y": 64
+    },
+    "clips": [
+      {
+        "name": "idle",
+        "frameCount": 2,
+        "sampleRate": 8,
+        "loopTime": true
+      },
+      {
+        "name": "walk_up",
+        "frameCount": 4,
+        "sampleRate": 8,
+        "loopTime": true
+      }
+    ]
+  }
+}

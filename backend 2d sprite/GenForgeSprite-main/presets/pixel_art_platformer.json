@@ -1,0 +1,22 @@
+{
+  "name": "pixel_art_platformer",
+  "display_name": "Pixel Art (Platformer)",
+  "description": "Side-scrolling platformer pixel art style",
+  "style": "pixel art",
+  "medium": "pixel art",
+  "canvas": [64, 64],
+  "color_scheme": "Bright, limited palette suitable for platformers",
+  "frame_rate": 10,
+  "frame_duration": 100,
+  "animations": {
+    "idle": 4,
+    "run": 6,
+    "jump": 3,
+    "fall": 2,
+    "attack": 3
+  },
+  "prompt_augmentation": {
+    "prefix": "pixel art, side view, platformer style",
+    "suffix": "bright colors, clean pixel edges, game sprite"
+  }
+}

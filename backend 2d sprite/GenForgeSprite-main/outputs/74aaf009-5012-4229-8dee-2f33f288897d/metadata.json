@@ -1,0 +1,113 @@
+{
+  "job_id": "74aaf009-5012-4229-8dee-2f33f288897d",
+  "prompt": "anime style samurai warrior with katana",
+  "preset": "anime_action",
+  "style": "anime",
+  "canvas_size": [
+    512,
+    512
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "idle": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/74aaf009-5012-4229-8dee-2f33f288897d/idle_sheet.png",
+      "gif": "outputs/74aaf009-5012-4229-8dee-2f33f288897d/idle.gif",
+      "frames": [
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/idle/frame_00.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/idle/frame_01.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/idle/frame_02.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/idle/frame_03.png"
+      ],
+      "loop": true
+    },
+    "run": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run_sheet.png",
+      "gif": "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run.gif",
+      "frames": [
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run/frame_00.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run/frame_01.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run/frame_02.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run/frame_03.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run/frame_04.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/run/frame_05.png"
+      ],
+      "loop": true
+    },
+    "attack": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/74aaf009-5012-4229-8dee-2f33f288897d/attack_sheet.png",
+      "gif": "outputs/74aaf009-5012-4229-8dee-2f33f288897d/attack.gif",
+      "frames": [
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/attack/frame_00.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/attack/frame_01.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/attack/frame_02.png",
+        "outputs/74aaf009-5012-4229-8dee-2f33f288897d/attack/frame_03.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "idle",
+        "frames": {
+          "start": 0,
+          "end": 3
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "run",
+        "frames": {
+          "start": 4,
+          "end": 9
+        },
+        "frameRate": 12,
+        "repeat": -1
+      },
+      {
+        "key": "attack",
+        "frames": {
+          "start": 10,
+          "end": 13
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "idle",
+        "frameCount": 4,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "run",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      },
+      {
+        "name": "attack",
+        "frameCount": 4,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}

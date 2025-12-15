@@ -1,0 +1,59 @@
+{
+  "job_id": "2749f862-3e94-4e85-886b-60f3e662ce13",
+  "prompt": "sonic with a sword",
+  "preset": "realistic_2d",
+  "style": "realistic",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frame_rate": 24,
+  "frame_duration_ms": 42,
+  "animations": {
+    "attack": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack_sheet.png",
+      "gif": "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack.gif",
+      "frames": [
+        "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack/frame_00.png",
+        "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack/frame_01.png",
+        "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack/frame_02.png",
+        "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack/frame_03.png",
+        "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack/frame_04.png",
+        "outputs/2749f862-3e94-4e85-886b-60f3e662ce13/attack/frame_05.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "attack",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 24,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "attack",
+        "frameCount": 6,
+        "sampleRate": 24,
+        "loopTime": true
+      }
+    ]
+  }
+}

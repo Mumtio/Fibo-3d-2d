@@ -1,0 +1,59 @@
+{
+  "job_id": "be660553-86f3-4169-9c1b-100aa5960aa8",
+  "prompt": "cute?",
+  "preset": "anime_action",
+  "style": "anime",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "idle": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle_sheet.png",
+      "gif": "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle.gif",
+      "frames": [
+        "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle/frame_00.png",
+        "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle/frame_01.png",
+        "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle/frame_02.png",
+        "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle/frame_03.png",
+        "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle/frame_04.png",
+        "outputs/be660553-86f3-4169-9c1b-100aa5960aa8/idle/frame_05.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "idle",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "idle",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}

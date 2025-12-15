@@ -1,0 +1,57 @@
+{
+  "job_id": "b332696d-23d9-4e28-b45c-058bc0de7b11",
+  "prompt": "cute",
+  "preset": "cartoon_platformer",
+  "style": "cartoon",
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "attack": {
+      "frame_count": 4,
+      "sprite_sheet": "outputs/b332696d-23d9-4e28-b45c-058bc0de7b11/attack_sheet.png",
+      "gif": "outputs/b332696d-23d9-4e28-b45c-058bc0de7b11/attack.gif",
+      "frames": [
+        "outputs/b332696d-23d9-4e28-b45c-058bc0de7b11/attack/frame_00.png",
+        "outputs/b332696d-23d9-4e28-b45c-058bc0de7b11/attack/frame_01.png",
+        "outputs/b332696d-23d9-4e28-b45c-058bc0de7b11/attack/frame_02.png",
+        "outputs/b332696d-23d9-4e28-b45c-058bc0de7b11/attack/frame_03.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 256,
+    "frameHeight": 256,
+    "animations": [
+      {
+        "key": "attack",
+        "frames": {
+          "start": 0,
+          "end": 3
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 256,
+      "y": 256
+    },
+    "clips": [
+      {
+        "name": "attack",
+        "frameCount": 4,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}
