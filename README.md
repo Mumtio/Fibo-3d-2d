@@ -1,6 +1,6 @@
 # GenForge - AI-Powered Game Asset Generator
 
-> 🏆 **FIBO Hackathon Submission** | Category: **Best New User Experience or Professional Tool**
+> 🏆 **FIBO Hackathon Submission** | 
 
 GenForge is a unified game asset generation platform that leverages **Bria FIBO's JSON-native structured prompts** to create production-ready 2D sprite sheets and 3D models from simple text descriptions.
 
