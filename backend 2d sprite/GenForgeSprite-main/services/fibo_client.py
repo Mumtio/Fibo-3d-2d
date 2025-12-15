@@ -114,23 +114,173 @@ def get_grid_layout(frame_count: int) -> tuple:
     return layouts.get(frame_count, (3, 2, "3:2"))  # Default to 3x2 grid
 
 
+def build_structured_sprite_prompt(
+    subject: str,
+    animation: str,
+    frame_count: int,
+    style: str,
+    cols: int,
+    rows: int
+) -> dict:
+    """
+    Build a FIBO structured prompt for more accurate sprite sheet generation.
+    Uses FIBO's structured format for better control over the output.
+    """
+    pose_sequence = get_animation_pose_sequence(animation, frame_count)
+    
+    safe_anim_names = {
+        "attack": "action swing",
+        "hurt": "reaction pose",
+        "death": "falling sequence",
+        "hit": "reaction",
+        "fight": "action sequence"
+    }
+    safe_anim = safe_anim_names.get(animation, animation)
+    
+    return {
+        "short_description": f"A {style} 2D game sprite sheet showing {frame_count} animation frames of {subject}",
+        "objects": [
+            {
+                "description": f"A {subject} character shown in {frame_count} different {safe_anim} poses",
+                "location": "arranged in a grid pattern filling the entire image",
+                "relationship": f"Same character repeated {frame_count} times in different poses",
+                "relative_size": "each frame takes equal space in the grid",
+                "shape_and_color": f"{style} art style with consistent colors across all frames",
+                "texture": "clean, flat 2D game art texture",
+                "appearance_details": f"Full body visible in each frame, {pose_sequence}"
+            }
+        ],
+        "background_setting": "Solid magenta (#FF00FF) chroma key background for easy removal",
+        "lighting": {
+            "conditions": "Flat, even lighting",
+            "direction": "Front",
+            "shadows": "None or minimal"
+        },
+        "aesthetics": {
+            "composition": f"Grid layout: {cols} columns x {rows} rows",
+            "color_scheme": f"{style} color palette, vibrant and game-ready",
+            "mood_atmosphere": "Dynamic action game character"
+        },
+        "photographic_characteristics": {
+            "camera_angle": "Side view / profile",
+            "lens_focal_length": "Standard",
+            "depth_of_field": "Flat, no depth blur",
+            "focus": "Sharp focus on all frames"
+        },
+        "style_medium": "digital illustration",
+        "context": "2D game sprite sheet for animation",
+        "artistic_style": style
+    }
+
+
 def generate_spritesheet_simple(
     subject: str,
     animation: str,
     frame_count: int = 6,
     style: str = "anime",
-    seed: int = 42
+    seed: int = 42,
+    use_structured: bool = False
 ) -> str:
     """
     Generate sprite sheet with dynamic grid layout based on frame count.
+    
+    Args:
+        use_structured: If True, uses FIBO's structured prompt format for better accuracy
     """
-    # Get pose descriptions
-    pose_sequence = get_animation_pose_sequence(animation, frame_count)
+    # Get optimal grid layout
+    cols, rows, aspect_ratio = get_grid_layout(frame_count)
+    
+    print(f"    Grid: {cols}x{rows}, Aspect: {aspect_ratio}, Structured: {use_structured}")
+    
+    if use_structured:
+        # Use structured prompt for better accuracy
+        structured_prompt = build_structured_sprite_prompt(
+            subject, animation, frame_count, style, cols, rows
+        )
+        return generate_image_sync(
+            structured_prompt=structured_prompt,
+            seed=seed,
+            aspect_ratio=aspect_ratio,
+            num_results=1
+        )
+    else:
+        # Use simple prompt (original behavior)
+        pose_sequence = get_animation_pose_sequence(animation, frame_count)
+        
+        safe_anim_names = {
+            "attack": "action swing",
+            "hurt": "reaction",
+            "death": "falling down",
+            "hit": "reaction",
+            "fight": "action"
+        }
+        safe_anim = safe_anim_names.get(animation, animation)
+        
+        if rows == 1:
+            layout_desc = f"horizontal strip with {cols} frames side by side"
+        else:
+            layout_desc = f"{rows} rows, {cols} columns ({frame_count} frames total)"
+        
+        prompt = (
+            f"{style} 2D game sprite sheet for {safe_anim} animation. "
+            f"Show the SAME {subject} character in {frame_count} DIFFERENT POSES arranged in a grid. "
+            f"Layout: {layout_desc}. "
+            f"Each cell shows the FULL BODY character in a different pose. "
+            f"Animation sequence: {pose_sequence} "
+            f"SAME character design in every frame, only pose changes. "
+            f"Side view, clean solid background, no text, game sprite style."
+        )
+        
+        return generate_image_sync(
+            simple_prompt=prompt,
+            seed=seed,
+            aspect_ratio=aspect_ratio,
+            num_results=1
+        )
+
+
+def download_image(url: str, save_path: str) -> str:
+    """Download image from URL and save locally."""
+    resp = requests.get(url, timeout=60)
+    if resp.status_code != 200:
+        raise Exception(f"Failed to download: {resp.status_code}")
+    
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    with open(save_path, "wb") as f:
+        f.write(resp.content)
+    
+    return save_path
+
+
+def refine_spritesheet(
+    original_prompt: str,
+    animation: str,
+    frame_count: int,
+    style: str,
+    refinement_instructions: str,
+    seed: int = None
+) -> str:
+    """
+    Refine/regenerate a sprite sheet with additional instructions.
+    Uses the original prompt plus refinement feedback for better results.
+    
+    Args:
+        original_prompt: The original character description
+        animation: Animation type (idle, run, attack, etc.)
+        frame_count: Number of frames
+        style: Art style
+        refinement_instructions: User feedback on what to improve
+        seed: Random seed (None for random, or specific for consistency)
+    """
+    import random
     
     # Get optimal grid layout
     cols, rows, aspect_ratio = get_grid_layout(frame_count)
     
-    # Safe animation names to avoid content moderation
+    # Get pose descriptions
+    pose_sequence = get_animation_pose_sequence(animation, frame_count)
+    
+    # Safe animation names
     safe_anim_names = {
         "attack": "action swing",
         "hurt": "reaction",
@@ -146,35 +296,27 @@ def generate_spritesheet_simple(
     else:
         layout_desc = f"{rows} rows, {cols} columns ({frame_count} frames total)"
     
-    # Clear, explicit prompt for animation frames
+    # Build refined prompt with user feedback
     prompt = (
         f"{style} 2D game sprite sheet for {safe_anim} animation. "
-        f"Show the SAME {subject} character in {frame_count} DIFFERENT POSES arranged in a grid. "
-        f"Layout: {layout_desc}. "
-        f"Each cell shows the FULL BODY character in a different pose. "
+        f"Character: {original_prompt}. "
+        f"Layout: {layout_desc} grid. "
         f"Animation sequence: {pose_sequence} "
-        f"SAME character design in every frame, only pose changes. "
-        f"Side view, clean solid background, no text, game sprite style."
+        f"IMPORTANT REFINEMENTS: {refinement_instructions}. "
+        f"Each cell shows FULL BODY of the SAME character in different pose. "
+        f"Consistent character design across all frames. "
+        f"Side view, clean magenta (#FF00FF) background for chroma key, no text."
     )
     
-    print(f"    Grid: {cols}x{rows}, Aspect: {aspect_ratio}")
+    # Use random seed for variation, or specific seed for consistency
+    actual_seed = seed if seed is not None else random.randint(1, 99999)
+    
+    print(f"    Refining with seed: {actual_seed}")
+    print(f"    Refinement: {refinement_instructions[:100]}...")
     
     return generate_image_sync(
         simple_prompt=prompt,
-        seed=seed,
+        seed=actual_seed,
         aspect_ratio=aspect_ratio,
         num_results=1
     )
-
-
-def download_image(url: str, save_path: str) -> str:
-    """Download image from URL and save locally."""
-    resp = requests.get(url, timeout=60)
-    if resp.status_code != 200:
-        raise Exception(f"Failed to download: {resp.status_code}")
-    
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    with open(save_path, "wb") as f:
-        f.write(resp.content)
-    
-    return save_path

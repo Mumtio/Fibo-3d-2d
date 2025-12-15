@@ -1,0 +1,59 @@
+{
+  "job_id": "05ec17f7-5f15-4156-afb6-df0f5e0a2bb5",
+  "prompt": "cute mouse\n",
+  "preset": "anime_action",
+  "style": "anime",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "run": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run_sheet.png",
+      "gif": "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run.gif",
+      "frames": [
+        "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run/frame_00.png",
+        "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run/frame_01.png",
+        "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run/frame_02.png",
+        "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run/frame_03.png",
+        "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run/frame_04.png",
+        "outputs/05ec17f7-5f15-4156-afb6-df0f5e0a2bb5/run/frame_05.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "run",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "run",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}

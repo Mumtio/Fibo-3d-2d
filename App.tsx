@@ -14,12 +14,12 @@ function NavBar() {
   return (
     <nav className="sticky top-0 z-50 bg-retro-base border-b-2 border-black shadow-lg">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link to="/" onClick={() => setTab('home')} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
              <div className="w-4 h-4 bg-pastel-pink rounded-sm rotate-45"></div>
            </div>
            <span className="text-xl font-extrabold tracking-tight">GenForge</span>
-        </div>
+        </Link>
 
         <div className="flex gap-1 bg-gray-200 p-1 rounded-full border border-gray-400">
           <Link to="/">

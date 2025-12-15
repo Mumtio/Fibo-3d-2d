@@ -4,7 +4,7 @@ import { OrbitControls, Stage, useGLTF, Html, useProgress, Grid, Environment } f
 import { 
   RotateCw, Box, Sun, Grid3X3, MousePointer2, Loader2, RefreshCcw, 
   MoveHorizontal, MoveVertical, Palette, Image as ImageIcon, Layers,
-  Scan
+  Scan, ZoomIn, ZoomOut
 } from 'lucide-react';
 import * as THREE from 'three';
 
@@ -52,7 +52,7 @@ function Loader() {
 }
 
 // Camera Reset Helper
-function CameraController({ shouldReset, onResetComplete }: { shouldReset: boolean, onResetComplete: () => void }) {
+function CameraController({ shouldReset, onResetComplete, zoomLevel }: { shouldReset: boolean, onResetComplete: () => void, zoomLevel: number }) {
   const { camera, controls } = useThree();
   const [initialState, setInitialState] = useState<{pos: THREE.Vector3, target: THREE.Vector3} | null>(null);
 
@@ -76,6 +76,13 @@ function CameraController({ shouldReset, onResetComplete }: { shouldReset: boole
       onResetComplete();
     }
   }, [shouldReset, camera, controls, onResetComplete, initialState]);
+
+  // Handle zoom level changes
+  useLayoutEffect(() => {
+    const direction = camera.position.clone().normalize();
+    camera.position.copy(direction.multiplyScalar(zoomLevel));
+  }, [zoomLevel, camera]);
+
   return null;
 }
 
@@ -142,6 +149,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({ url }) => {
   // State
   const [autoRotate, setAutoRotate] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
+  const [zoomLevel, setZoomLevel] = useState(4); // Camera distance
   
   // Lighting & Environment
   const [lightIntensity, setLightIntensity] = useState(1);
@@ -162,6 +170,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({ url }) => {
     setLightRotation(0);
     setLightElevation(0);
     setLightIntensity(1);
+    setZoomLevel(4);
   };
   
   const cycleEnv = () => setEnvIndex((prev) => (prev + 1) % ENV_PRESETS.length);
@@ -219,7 +228,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({ url }) => {
               />
             )}
             
-            <CameraController shouldReset={resetCamera} onResetComplete={() => setResetCamera(false)} />
+            <CameraController shouldReset={resetCamera} onResetComplete={() => setResetCamera(false)} zoomLevel={zoomLevel} />
           </Suspense>
           
           <OrbitControls 
@@ -256,6 +265,27 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({ url }) => {
             </button>
             <button onClick={handleReset} title="Reset View" className="p-2 hover:bg-gray-100 rounded-xl text-gray-500">
               <RefreshCcw size={18} />
+            </button>
+          </div>
+
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-1 pr-2 border-r border-gray-200">
+            <button 
+              onClick={() => setZoomLevel(z => Math.min(10, z + 1))}
+              title="Zoom Out"
+              className="p-2 hover:bg-gray-100 rounded-xl text-gray-500 disabled:opacity-50"
+              disabled={zoomLevel >= 10}
+            >
+              <ZoomOut size={18} />
+            </button>
+            <span className="text-[10px] font-bold text-gray-500 w-8 text-center">{Math.round((4/zoomLevel) * 100)}%</span>
+            <button 
+              onClick={() => setZoomLevel(z => Math.max(1.5, z - 1))}
+              title="Zoom In"
+              className="p-2 hover:bg-gray-100 rounded-xl text-gray-500 disabled:opacity-50"
+              disabled={zoomLevel <= 1.5}
+            >
+              <ZoomIn size={18} />
             </button>
           </div>
 

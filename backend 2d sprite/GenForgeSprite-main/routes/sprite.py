@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from services.sprite_service import process_sprite_job, get_available_presets
+from services.sprite_service import process_sprite_job, get_available_presets, refine_sprite_animation
 
 # Create namespace with description
 sprite_ns = Namespace(
@@ -133,3 +133,88 @@ class PresetDetail(Resource):
         if preset_name in presets:
             return presets[preset_name]
         return {"error": f"Preset '{preset_name}' not found"}, 404
+
+
+# Refine request model
+refine_request = sprite_ns.model('RefineRequest', {
+    'job_id': fields.String(
+        required=True,
+        description='Original job ID to refine',
+        example='abc123-def456'
+    ),
+    'animation': fields.String(
+        required=True,
+        description='Animation to refine',
+        example='idle'
+    ),
+    'prompt': fields.String(
+        required=True,
+        description='Original character prompt',
+        example='ninja warrior with katana'
+    ),
+    'preset': fields.String(
+        required=False,
+        description='Style preset name',
+        example='anime_action',
+        default='anime_action'
+    ),
+    'refinement': fields.String(
+        required=True,
+        description='Instructions for how to improve the sprite',
+        example='Make the character face more to the right, add more dynamic poses'
+    ),
+    'seed': fields.Integer(
+        required=False,
+        description='Random seed for consistency (optional)',
+        example=42
+    )
+})
+
+refine_response = sprite_ns.model('RefineResponse', {
+    'job_id': fields.String(description='New refined job identifier'),
+    'original_job_id': fields.String(description='Original job ID'),
+    'status': fields.String(description='Job status'),
+    'animation': fields.String(description='Animation that was refined'),
+    'prompt': fields.String(description='Original prompt'),
+    'refinement': fields.String(description='Refinement instructions used'),
+    'frame_size': fields.List(fields.Integer, description='Frame dimensions'),
+    'frame_count': fields.Integer(description='Number of frames'),
+    'sprite_sheet': fields.String(description='Path to refined sprite sheet'),
+    'gif': fields.String(description='Path to refined GIF'),
+    'download_urls': fields.Raw(description='Download URLs')
+})
+
+
+@sprite_ns.route('/refine')
+class Refine(Resource):
+    @sprite_ns.doc('refine_sprite')
+    @sprite_ns.expect(refine_request)
+    @sprite_ns.response(200, 'Sprite refined successfully', refine_response)
+    @sprite_ns.response(400, 'Invalid request', error_model)
+    @sprite_ns.response(500, 'Server error', error_model)
+    def post(self):
+        """
+        Refine a specific animation with user feedback.
+        
+        This endpoint allows you to regenerate a single animation from an existing
+        job with additional instructions to improve the result. Use this when:
+        - The poses aren't quite right
+        - The character design needs adjustment
+        - You want more dynamic or different poses
+        - The framing or composition needs work
+        
+        The refinement instructions are added to the original prompt to guide
+        the AI in generating an improved version.
+        """
+        data = sprite_ns.payload
+        
+        required = ['job_id', 'animation', 'prompt', 'refinement']
+        missing = [f for f in required if not data.get(f)]
+        if missing:
+            return {"error": f"Missing required fields: {', '.join(missing)}"}, 400
+        
+        try:
+            result = refine_sprite_animation(data)
+            return result
+        except Exception as e:
+            return {"error": str(e)}, 500

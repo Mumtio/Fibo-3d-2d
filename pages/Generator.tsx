@@ -6,7 +6,8 @@ import { ModelViewer } from '../components/three/ModelViewer';
 import { SpriteAnimator } from '../components/sprite/SpriteAnimator';
 import { 
   Wand2, RefreshCw, Layers, Sparkles, AlertCircle, CheckCircle, 
-  Download, Info, ChevronDown, ChevronUp 
+  Download, Info, ChevronDown, ChevronUp, Gauge, Play, Pause,
+  Box, Ghost, Zap, AlertTriangle
 } from 'lucide-react';
 import { api, SpritePreset, SpriteGenerationResult } from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,8 +32,12 @@ export const Generator: React.FC = () => {
   const [spriteResult, setSpriteResult] = useState<SpriteGenerationResult | null>(null);
   const [selectedAnimation, setSelectedAnimation] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<'moderation' | 'network' | 'general'>('general');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [progressMessage, setProgressMessage] = useState<string>('');
+  const [animationSpeed, setAnimationSpeed] = useState<number>(100); // ms per frame
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [useFiboEnhanced, setUseFiboEnhanced] = useState(false);
 
   // Check backends on mount
   useEffect(() => {
@@ -120,15 +125,18 @@ export const Generator: React.FC = () => {
       } else {
         // 2D Sprite Generation
         updateStep('concept', 'active');
+        setProgressMessage(useFiboEnhanced ? 'Using FIBO Enhanced mode...' : 'Preparing generation...');
         await new Promise(r => setTimeout(r, 300));
         updateStep('concept', 'completed');
 
         updateStep('spritesheet', 'active');
+        setProgressMessage('Generating sprite sheets...');
         
         const result = await api.generateSprite(
           prompt,
           selectedPreset,
-          selectedAnimations.length > 0 ? selectedAnimations : undefined
+          selectedAnimations.length > 0 ? selectedAnimations : undefined,
+          useFiboEnhanced
         );
         
         updateStep('spritesheet', 'completed');
@@ -153,7 +161,21 @@ export const Generator: React.FC = () => {
       useAppStore.setState({ isGenerating: false, generationStatus: 'completed' });
     } catch (e) {
       console.error(e);
-      setErrorMessage(e instanceof Error ? e.message : 'Generation failed');
+      const errorMsg = e instanceof Error ? e.message : 'Generation failed';
+      
+      // Detect error type for better formatting
+      if (errorMsg.toLowerCase().includes('moderation') || errorMsg.toLowerCase().includes('content')) {
+        setErrorType('moderation');
+        setErrorMessage('Your prompt was flagged by content moderation. Please try a different description without potentially offensive or inappropriate content.');
+      } else if (errorMsg.toLowerCase().includes('network') || errorMsg.toLowerCase().includes('fetch') || errorMsg.toLowerCase().includes('timeout')) {
+        setErrorType('network');
+        setErrorMessage('Network error. Please check your connection and ensure the backend server is running.');
+      } else {
+        setErrorType('general');
+        setErrorMessage(errorMsg);
+      }
+      
+      setProgressMessage('');
       useAppStore.setState({ isGenerating: false, generationStatus: 'failed' });
     }
   };
@@ -315,7 +337,30 @@ export const Generator: React.FC = () => {
                 </button>
 
                 {showAdvanced && currentPreset && (
-                  <div className="bg-gray-50 p-3 rounded-lg text-xs space-y-1">
+                  <div className="bg-gray-50 p-3 rounded-lg text-xs space-y-3">
+                    {/* FIBO Enhanced Mode Toggle */}
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <Zap size={14} className={useFiboEnhanced ? 'text-pastel-pink' : 'text-gray-400'} />
+                          <span className="font-bold text-gray-700">FIBO Enhanced</span>
+                        </div>
+                        <p className="text-[10px] text-gray-500 mt-0.5">
+                          Uses structured prompts for more accurate sprite sheets
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setUseFiboEnhanced(!useFiboEnhanced)}
+                        className={`relative w-12 h-6 rounded-full transition-colors ${
+                          useFiboEnhanced ? 'bg-pastel-pink' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${
+                          useFiboEnhanced ? 'translate-x-7' : 'translate-x-1'
+                        }`} />
+                      </button>
+                    </div>
+                    
                     <div className="flex justify-between">
                       <span className="text-gray-500">Style:</span>
                       <span className="font-medium">{currentPreset.style}</span>
@@ -339,10 +384,52 @@ export const Generator: React.FC = () => {
 
             {/* Error Message */}
             {errorMessage && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-start gap-2">
-                <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
-                {errorMessage}
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-4 rounded-lg text-sm ${
+                  errorType === 'moderation' 
+                    ? 'bg-orange-50 border-2 border-orange-300' 
+                    : errorType === 'network'
+                    ? 'bg-yellow-50 border-2 border-yellow-300'
+                    : 'bg-red-50 border-2 border-red-300'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`p-2 rounded-full ${
+                    errorType === 'moderation' ? 'bg-orange-100' :
+                    errorType === 'network' ? 'bg-yellow-100' : 'bg-red-100'
+                  }`}>
+                    {errorType === 'moderation' ? (
+                      <AlertTriangle size={18} className="text-orange-600" />
+                    ) : errorType === 'network' ? (
+                      <Zap size={18} className="text-yellow-600" />
+                    ) : (
+                      <AlertCircle size={18} className="text-red-600" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className={`font-bold mb-1 ${
+                      errorType === 'moderation' ? 'text-orange-800' :
+                      errorType === 'network' ? 'text-yellow-800' : 'text-red-800'
+                    }`}>
+                      {errorType === 'moderation' ? 'Content Moderation' :
+                       errorType === 'network' ? 'Connection Issue' : 'Generation Failed'}
+                    </h4>
+                    <p className={`${
+                      errorType === 'moderation' ? 'text-orange-700' :
+                      errorType === 'network' ? 'text-yellow-700' : 'text-red-700'
+                    }`}>
+                      {errorMessage}
+                    </p>
+                    {errorType === 'moderation' && (
+                      <p className="text-orange-600 text-xs mt-2 italic">
+                        Tip: Try using more neutral, descriptive terms for your character.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
             )}
 
             {/* Generate Button */}
@@ -416,15 +503,61 @@ export const Generator: React.FC = () => {
             )}
             
             {isGenerating && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 z-20">
-                <RefreshCw className="animate-spin text-pastel-pink w-12 h-12 mb-4" />
-                <span className="font-bold tracking-wide">
-                  {selectedMode === '3D' ? 'Generating 3D model...' : 'Generating sprites...'}
-                </span>
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-white/95 to-gray-50/95 z-20"
+              >
+                {/* Animated Icon */}
+                <div className="relative mb-6">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                    className="w-20 h-20 rounded-full border-4 border-gray-200 border-t-pastel-pink"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {selectedMode === '3D' ? (
+                      <Box size={32} className="text-pastel-pink" />
+                    ) : (
+                      <Ghost size={32} className="text-pastel-mint" />
+                    )}
+                  </div>
+                </div>
+                
+                {/* Title */}
+                <motion.h3 
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-xl font-bold tracking-wide text-gray-800 mb-2"
+                >
+                  {selectedMode === '3D' ? 'Creating 3D Model' : 'Generating Sprites'}
+                </motion.h3>
+                
+                {/* Progress Message */}
                 {progressMessage && (
-                  <span className="text-sm text-gray-500 mt-2">{progressMessage}</span>
+                  <motion.div
+                    key={progressMessage}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border"
+                  >
+                    <Sparkles size={14} className="text-pastel-yellow" />
+                    <span className="text-sm">{progressMessage}</span>
+                  </motion.div>
                 )}
-              </div>
+                
+                {/* Animated Dots */}
+                <div className="flex gap-1 mt-4">
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                      className={`w-2 h-2 rounded-full ${selectedMode === '3D' ? 'bg-pastel-pink' : 'bg-pastel-mint'}`}
+                    />
+                  ))}
+                </div>
+              </motion.div>
             )}
 
             {currentResult && selectedMode === '3D' && (
@@ -465,6 +598,10 @@ export const Generator: React.FC = () => {
                     frameCount={spriteResult.animations[selectedAnimation]?.frame_count || 6}
                     frameWidth={spriteResult.frame_size[0]}
                     frameHeight={spriteResult.frame_size[1]}
+                    speed={animationSpeed}
+                    onSpeedChange={setAnimationSpeed}
+                    externalIsPlaying={isPlaying}
+                    onPlayingChange={setIsPlaying}
                   />
                 </div>
               </div>
@@ -514,6 +651,7 @@ export const Generator: React.FC = () => {
           )}
         </RetroCard>
       </div>
+
     </div>
   );
 };

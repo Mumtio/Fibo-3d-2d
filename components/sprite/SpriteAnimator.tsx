@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Pause, Download, Image as ImageIcon, Film, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Play, Pause, Download, Image as ImageIcon, Film, ChevronRight, ChevronLeft, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface SpriteAnimatorProps {
   gifUrl: string;
@@ -8,6 +8,10 @@ interface SpriteAnimatorProps {
   frameCount?: number;
   frameWidth?: number;
   frameHeight?: number;
+  speed?: number; // ms per frame
+  onSpeedChange?: (speed: number) => void;
+  externalIsPlaying?: boolean;
+  onPlayingChange?: (playing: boolean) => void;
 }
 
 export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({ 
@@ -15,15 +19,25 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
   sheetUrl, 
   frameCount = 6,
   frameWidth,
-  frameHeight 
+  frameHeight,
+  speed = 100,
+  onSpeedChange,
+  externalIsPlaying,
+  onPlayingChange
 }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [internalIsPlaying, setInternalIsPlaying] = useState(true);
+  const isPlaying = externalIsPlaying !== undefined ? externalIsPlaying : internalIsPlaying;
+  const setIsPlaying = onPlayingChange || setInternalIsPlaying;
+  
   const [viewMode, setViewMode] = useState<'preview' | 'sheet'>('preview');
   const [imgError, setImgError] = useState(false);
   const [currentFrame, setCurrentFrame] = useState(0);
   const [sheetDimensions, setSheetDimensions] = useState<{ width: number; height: number } | null>(null);
   const [frames, setFrames] = useState<string[]>([]);
+  const [zoom, setZoom] = useState(1);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number | null>(null);
+  const lastFrameTimeRef = useRef<number>(0);
 
   // Load sprite sheet and extract frames
   useEffect(() => {
@@ -64,6 +78,32 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
     img.onerror = () => setImgError(true);
     img.src = sheetUrl;
   }, [sheetUrl, frameCount, frameWidth, frameHeight]);
+
+  // Custom animation loop with speed control (when not using GIF)
+  useEffect(() => {
+    if (!isPlaying || viewMode !== 'preview' || frames.length === 0) {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      return;
+    }
+
+    const animate = (timestamp: number) => {
+      if (timestamp - lastFrameTimeRef.current >= speed) {
+        setCurrentFrame((prev) => (prev + 1) % frameCount);
+        lastFrameTimeRef.current = timestamp;
+      }
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPlaying, viewMode, frames.length, speed, frameCount]);
 
   // Handle frame navigation
   const nextFrame = () => {
@@ -143,28 +183,28 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
               <img 
                 src={sheetUrl} 
                 alt="Full Sprite Sheet" 
-                className="max-w-[90%] max-h-[90%] object-contain drop-shadow-xl"
-                style={{ imageRendering: 'pixelated' }}
+                className="max-w-[90%] max-h-[90%] object-contain drop-shadow-xl transition-transform"
+                style={{ imageRendering: 'pixelated', transform: `scale(${zoom})` }}
                 onError={() => setImgError(true)}
               />
             )}
 
-            {viewMode === 'preview' && isPlaying && (
+            {viewMode === 'preview' && frames.length > 0 && (
+              <img 
+                src={frames[currentFrame] || frames[0]}
+                alt={`Frame ${currentFrame + 1}`}
+                className="max-w-[60%] max-h-[60%] object-contain drop-shadow-xl transition-transform"
+                style={{ imageRendering: 'pixelated', transform: `scale(${zoom})` }}
+              />
+            )}
+            
+            {viewMode === 'preview' && frames.length === 0 && (
               <motion.img 
                 src={gifUrl} 
                 alt="Animation Preview" 
-                className="max-w-[60%] max-h-[60%] object-contain drop-shadow-xl"
-                style={{ imageRendering: 'pixelated' }}
+                className="max-w-[60%] max-h-[60%] object-contain drop-shadow-xl transition-transform"
+                style={{ imageRendering: 'pixelated', transform: `scale(${zoom})` }}
                 onError={() => setImgError(true)}
-              />
-            )}
-
-            {viewMode === 'preview' && !isPlaying && frames[currentFrame] && (
-              <img 
-                src={frames[currentFrame]}
-                alt={`Frame ${currentFrame + 1}`}
-                className="max-w-[60%] max-h-[60%] object-contain drop-shadow-xl"
-                style={{ imageRendering: 'pixelated' }}
               />
             )}
           </>
@@ -237,12 +277,53 @@ export const SpriteAnimator: React.FC<SpriteAnimatorProps> = ({
               <div className="h-6 w-[1px] bg-gray-400 mx-1"></div>
             </>
           )}
+          
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => setZoom(z => Math.max(0.5, z - 0.25))}
+              className="p-2 hover:bg-black/10 rounded disabled:opacity-50"
+              disabled={zoom <= 0.5}
+              title="Zoom Out"
+            >
+              <ZoomOut size={16} />
+            </button>
+            <span className="text-xs font-retro w-12 text-center">{Math.round(zoom * 100)}%</span>
+            <button 
+              onClick={() => setZoom(z => Math.min(3, z + 0.25))}
+              className="p-2 hover:bg-black/10 rounded disabled:opacity-50"
+              disabled={zoom >= 3}
+              title="Zoom In"
+            >
+              <ZoomIn size={16} />
+            </button>
+          </div>
+          
+          <div className="h-6 w-[1px] bg-gray-400 mx-1"></div>
         </div>
 
         <div className="flex items-center gap-4 flex-1 justify-end">
+          {/* Speed Control */}
+          {viewMode === 'preview' && (
+            <div className="flex items-center gap-2 flex-1 max-w-[180px]">
+              <span className="font-retro text-[10px] text-gray-600 whitespace-nowrap hidden sm:inline">SPEED</span>
+              <input 
+                type="range" min="30" max="300" step="10"
+                value={300 - speed + 30} // Invert so right = faster
+                onChange={(e) => {
+                  const newSpeed = 300 - Number(e.target.value) + 30;
+                  onSpeedChange?.(newSpeed);
+                }}
+                className="w-full accent-pastel-mint h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+                title={`${Math.round(1000 / speed)} FPS`}
+              />
+              <span className="font-retro text-[10px] text-gray-500 w-12 text-right">{Math.round(1000 / speed)}fps</span>
+            </div>
+          )}
+          
           {viewMode === 'preview' && !isPlaying && (
-            <div className="flex items-center gap-2 flex-1 max-w-[200px]">
-              <span className="font-retro text-sm text-gray-600 whitespace-nowrap hidden sm:inline">SCRUB</span>
+            <div className="flex items-center gap-2 flex-1 max-w-[150px]">
+              <span className="font-retro text-[10px] text-gray-600 whitespace-nowrap hidden sm:inline">FRAME</span>
               <input 
                 type="range" min="0" max={frameCount - 1} step="1"
                 value={currentFrame} onChange={(e) => setCurrentFrame(Number(e.target.value))}

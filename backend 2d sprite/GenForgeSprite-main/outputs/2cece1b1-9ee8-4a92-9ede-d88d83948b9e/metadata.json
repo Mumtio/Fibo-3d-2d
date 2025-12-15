@@ -1,0 +1,59 @@
+{
+  "job_id": "2cece1b1-9ee8-4a92-9ede-d88d83948b9e",
+  "prompt": "nija",
+  "preset": "pixel_art_platformer",
+  "style": "pixel art",
+  "frame_size": [
+    64,
+    64
+  ],
+  "frame_rate": 10,
+  "frame_duration_ms": 100,
+  "animations": {
+    "run": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run_sheet.png",
+      "gif": "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run.gif",
+      "frames": [
+        "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run/frame_00.png",
+        "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run/frame_01.png",
+        "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run/frame_02.png",
+        "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run/frame_03.png",
+        "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run/frame_04.png",
+        "outputs/2cece1b1-9ee8-4a92-9ede-d88d83948b9e/run/frame_05.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 64,
+    "frameHeight": 64,
+    "animations": [
+      {
+        "key": "run",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 10,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 64,
+      "y": 64
+    },
+    "clips": [
+      {
+        "name": "run",
+        "frameCount": 6,
+        "sampleRate": 10,
+        "loopTime": true
+      }
+    ]
+  }
+}

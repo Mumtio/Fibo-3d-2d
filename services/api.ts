@@ -43,6 +43,20 @@ export interface SpriteGenerationResult {
   download_urls: Record<string, string>;
 }
 
+export interface SpriteRefineResult {
+  job_id: string;
+  original_job_id: string;
+  status: string;
+  animation: string;
+  prompt: string;
+  refinement: string;
+  frame_size: [number, number];
+  frame_count: number;
+  sprite_sheet: string;
+  gif: string;
+  download_urls: Record<string, string>;
+}
+
 // --- 3D TYPES ---
 export interface FiboStructure {
   category: string;
@@ -109,7 +123,8 @@ export const api = {
   generateSprite: async (
     prompt: string,
     preset: string,
-    animations?: string[]
+    animations?: string[],
+    useFiboEnhanced?: boolean
   ): Promise<SpriteGenerationResult> => {
     const response = await fetch(`${SPRITE_API_BASE}/api/sprite/generate`, {
       method: 'POST',
@@ -117,7 +132,8 @@ export const api = {
       body: JSON.stringify({
         prompt,
         preset,
-        animations: animations?.length ? animations : undefined
+        animations: animations?.length ? animations : undefined,
+        use_fibo_enhanced: useFiboEnhanced || false
       })
     });
 
@@ -135,6 +151,36 @@ export const api = {
   getOutputUrl: (path: string): string => {
     if (path.startsWith('http')) return path;
     return `${SPRITE_API_BASE}${path.startsWith('/') ? '' : '/'}${path}`;
+  },
+
+  /**
+   * POST /api/sprite/refine - Refine a specific animation with feedback
+   */
+  refineSprite: async (
+    jobId: string,
+    animation: string,
+    prompt: string,
+    refinement: string,
+    preset?: string
+  ): Promise<SpriteRefineResult> => {
+    const response = await fetch(`${SPRITE_API_BASE}/api/sprite/refine`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        job_id: jobId,
+        animation,
+        prompt,
+        refinement,
+        preset: preset || 'anime_action'
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(error.error || `Refine failed: ${response.status}`);
+    }
+
+    return response.json();
   },
 
   // ==================== 3D BACKEND ====================

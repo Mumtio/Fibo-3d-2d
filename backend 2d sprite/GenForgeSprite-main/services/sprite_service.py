@@ -13,7 +13,8 @@ from typing import Dict, List, Any, Tuple
 from services.fibo_client import (
     generate_image_sync,
     generate_spritesheet_simple,
-    download_image
+    download_image,
+    refine_spritesheet
 )
 from services.preset_loader import load_preset, get_all_presets
 from dotenv import load_dotenv
@@ -246,11 +247,14 @@ def generate_spritesheet_image(
     animation: str,
     frame_count: int,
     preset: dict,
-    job_id: str
+    job_id: str,
+    use_fibo_enhanced: bool = False
 ) -> str:
     """
     Generate a complete sprite sheet for one animation in a SINGLE API call.
-    Uses SIMPLE prompts like the FIBO platform UI - which gives best results.
+    
+    Args:
+        use_fibo_enhanced: If True, uses FIBO's structured prompt for better accuracy
     """
     out_dir = f"outputs/{job_id}"
     os.makedirs(out_dir, exist_ok=True)
@@ -260,16 +264,17 @@ def generate_spritesheet_image(
         print(f"  [MOCK] Generating {animation} sprite sheet...")
         return generate_mock_spritesheet(prompt, animation, frame_count, preset, out_path)
     
-    print(f"  Calling FIBO API for {animation} ({frame_count} frames)...")
+    mode_str = "FIBO Enhanced" if use_fibo_enhanced else "Simple"
+    print(f"  Calling FIBO API for {animation} ({frame_count} frames) - Mode: {mode_str}...")
     
-    # Use SIMPLE prompt approach - like what works on FIBO platform directly
     style = preset.get("style", "anime")
     image_url = generate_spritesheet_simple(
         subject=prompt,
         animation=animation,
         frame_count=frame_count,
         style=style,
-        seed=42
+        seed=42,
+        use_structured=use_fibo_enhanced
     )
     download_image(image_url, out_path)
     
@@ -613,9 +618,13 @@ def process_sprite_job(req: dict) -> dict:
     """
     job_id = str(uuid.uuid4())
     
+    # Check for FIBO Enhanced mode
+    use_fibo_enhanced = req.get("use_fibo_enhanced", False)
+    
     print(f"\n{'='*60}")
     print(f"SPRITE GENERATION JOB: {job_id}")
     print(f"Mode: {'MOCK' if USE_MOCK else 'FIBO API'}")
+    print(f"FIBO Enhanced: {use_fibo_enhanced}")
     print(f"Method: Full sprite sheet generation (AI creates all frames)")
     print(f"{'='*60}")
     
@@ -646,7 +655,8 @@ def process_sprite_job(req: dict) -> dict:
         
         # Step 1: Generate complete sprite sheet in ONE call
         raw_sheet_path = generate_spritesheet_image(
-            prompt, anim, frame_count, preset, job_id
+            prompt, anim, frame_count, preset, job_id,
+            use_fibo_enhanced=use_fibo_enhanced
         )
         print(f"  Raw sheet: {raw_sheet_path}")
         
@@ -705,5 +715,103 @@ def process_sprite_job(req: dict) -> dict:
             "metadata": f"/outputs/{job_id}/metadata.json",
             **{f"{a}_sheet": f"/outputs/{job_id}/{a}_sheet.png" for a in outputs},
             **{f"{a}_gif": f"/outputs/{job_id}/{a}.gif" for a in outputs}
+        }
+    }
+
+
+def refine_sprite_animation(req: dict) -> dict:
+    """
+    Refine a specific animation from an existing job with user feedback.
+    
+    This allows users to regenerate a single animation with improvements
+    based on their feedback about what was wrong with the original.
+    """
+    job_id = req.get("job_id")
+    animation = req.get("animation")
+    original_prompt = req.get("prompt")
+    preset_name = req.get("preset", "anime_action")
+    refinement = req.get("refinement", "")
+    seed = req.get("seed")  # Optional: specific seed for consistency
+    
+    if not all([job_id, animation, original_prompt]):
+        raise ValueError("Missing required fields: job_id, animation, prompt")
+    
+    print(f"\n{'='*60}")
+    print(f"SPRITE REFINEMENT JOB")
+    print(f"Original Job: {job_id}")
+    print(f"Animation: {animation}")
+    print(f"Refinement: {refinement[:100]}...")
+    print(f"{'='*60}")
+    
+    preset = load_preset(preset_name)
+    frame_size = tuple(preset.get("canvas", [128, 128]))
+    style = preset.get("style", "anime")
+    duration = preset.get("frame_duration", 100)
+    
+    # Get frame count for this animation
+    anim_config = preset.get("animations", {"idle": 4, "run": 6, "attack": 4})
+    frame_count = anim_config.get(animation, 4)
+    
+    # Create output directory (reuse job_id with _refined suffix)
+    refined_job_id = f"{job_id}_refined_{animation}"
+    out_dir = f"outputs/{refined_job_id}"
+    os.makedirs(out_dir, exist_ok=True)
+    
+    print(f"\n[{animation}] Refining {frame_count}-frame sprite sheet...")
+    
+    # Step 1: Generate refined sprite sheet
+    if USE_MOCK:
+        print(f"  [MOCK] Generating refined {animation} sprite sheet...")
+        raw_sheet_path = generate_mock_spritesheet(
+            original_prompt, animation, frame_count, preset, 
+            f"{out_dir}/{animation}_raw.png"
+        )
+    else:
+        print(f"  Calling FIBO API for refined {animation}...")
+        image_url = refine_spritesheet(
+            original_prompt=original_prompt,
+            animation=animation,
+            frame_count=frame_count,
+            style=style,
+            refinement_instructions=refinement,
+            seed=seed
+        )
+        raw_sheet_path = f"{out_dir}/{animation}_raw.png"
+        download_image(image_url, raw_sheet_path)
+    
+    print(f"  Raw sheet: {raw_sheet_path}")
+    
+    # Step 2: Slice into individual frames
+    print(f"  Slicing into {frame_count} frames...")
+    frame_paths = slice_spritesheet(
+        raw_sheet_path, frame_count, frame_size, refined_job_id, animation
+    )
+    
+    # Step 3: Create processed sprite sheet and GIF
+    sheet_path = f"{out_dir}/{animation}_sheet.png"
+    gif_path = f"{out_dir}/{animation}.gif"
+    
+    make_sprite_sheet(frame_paths, sheet_path)
+    make_gif(frame_paths, gif_path, duration)
+    
+    print(f"  Done: {sheet_path}")
+    print(f"\n{'='*60}")
+    print(f"REFINEMENT COMPLETE: {refined_job_id}")
+    print(f"{'='*60}\n")
+    
+    return {
+        "job_id": refined_job_id,
+        "original_job_id": job_id,
+        "status": "completed",
+        "animation": animation,
+        "prompt": original_prompt,
+        "refinement": refinement,
+        "frame_size": list(frame_size),
+        "frame_count": frame_count,
+        "sprite_sheet": sheet_path,
+        "gif": gif_path,
+        "download_urls": {
+            "sprite_sheet": f"/outputs/{refined_job_id}/{animation}_sheet.png",
+            "gif": f"/outputs/{refined_job_id}/{animation}.gif"
         }
     }

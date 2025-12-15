@@ -1,0 +1,59 @@
+{
+  "job_id": "515f43a1-5674-4d9c-94cd-147c8ff94828",
+  "prompt": " chicken",
+  "preset": "anime_action",
+  "style": "anime",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frame_rate": 12,
+  "frame_duration_ms": 83,
+  "animations": {
+    "jump": {
+      "frame_count": 6,
+      "sprite_sheet": "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump_sheet.png",
+      "gif": "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump.gif",
+      "frames": [
+        "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump/frame_00.png",
+        "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump/frame_01.png",
+        "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump/frame_02.png",
+        "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump/frame_03.png",
+        "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump/frame_04.png",
+        "outputs/515f43a1-5674-4d9c-94cd-147c8ff94828/jump/frame_05.png"
+      ],
+      "loop": true
+    }
+  },
+  "phaser_config": {
+    "frameWidth": 512,
+    "frameHeight": 512,
+    "animations": [
+      {
+        "key": "jump",
+        "frames": {
+          "start": 0,
+          "end": 5
+        },
+        "frameRate": 12,
+        "repeat": -1
+      }
+    ]
+  },
+  "unity_config": {
+    "pixelsPerUnit": 100,
+    "spriteMode": "Multiple",
+    "frameSize": {
+      "x": 512,
+      "y": 512
+    },
+    "clips": [
+      {
+        "name": "jump",
+        "frameCount": 6,
+        "sampleRate": 12,
+        "loopTime": true
+      }
+    ]
+  }
+}
