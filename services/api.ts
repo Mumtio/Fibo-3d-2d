@@ -294,52 +294,40 @@ export const api = {
 
   /**
    * Generate 3D model using the full pipeline (FIBO -> TRIPO)
-   * Uses async pipeline with polling for status updates
+   * Uses synchronous endpoint for reliable cloud deployment
    */
   generate3D: async (prompt: string, onProgress?: (status: string) => void): Promise<{
     imageUrl: string;
     modelUrl: string;
   }> => {
-    // Start the async pipeline
     onProgress?.('Starting 3D generation pipeline...');
-    const { job_id } = await api.start3DPipeline(prompt);
+    onProgress?.('Generating reference image with FIBO...');
     
-    onProgress?.(`Pipeline started (Job: ${job_id.slice(0, 8)}...)`);
+    // Use sync endpoint - more reliable for cloud deployment
+    const response = await fetch(`${MODEL_3D_API_BASE}/3d/generate-sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(error.detail || `Failed to generate 3D: ${response.status}`);
+    }
+
+    const result = await response.json();
+    onProgress?.('Complete!');
     
-    // Poll for status
-    const maxAttempts = 120; // 10 minutes max (5 second intervals)
-    for (let i = 0; i < maxAttempts; i++) {
-      await wait(5000);
-      
-      const status = await api.get3DJobStatus(job_id);
-      
-      switch (status.status) {
-        case 'pending':
-          onProgress?.('Waiting to start...');
-          break;
-        case 'generating_image':
-          onProgress?.('Generating reference image with FIBO...');
-          break;
-        case 'generating_3d':
-          onProgress?.('Converting to 3D model with TRIPO...');
-          break;
-        case 'completed':
-          onProgress?.('Complete!');
-          // If model_url is a local path, prepend the backend URL
-          let modelUrl = status.model_url || '';
-          if (modelUrl.startsWith('/')) {
-            modelUrl = `${MODEL_3D_API_BASE}${modelUrl}`;
-          }
-          return {
-            imageUrl: status.image_url || '',
-            modelUrl
-          };
-        case 'failed':
-          throw new Error(status.error || 'Pipeline failed');
-      }
+    // If model_url is a local path, prepend the backend URL
+    let modelUrl = result.model_url || '';
+    if (modelUrl.startsWith('/')) {
+      modelUrl = `${MODEL_3D_API_BASE}${modelUrl}`;
     }
     
-    throw new Error('Pipeline timed out');
+    return {
+      imageUrl: result.image_url || '',
+      modelUrl
+    };
   },
 
   getAsset: async (id: string): Promise<Asset | null> => {
